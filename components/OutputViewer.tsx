@@ -53,7 +53,7 @@ export function OutputViewer({
         <div className="output-body">
           <div className="output-meta">
             <span>{activeTab === "env" ? "Environment Variable Key-Value Output" : activeTab === "yaml" ? "Generated Agent Config YAML" : "ECS container startup configuration"}</span>
-            <span>{activeTab === "ecs" ? "entryPoint + command" : activeTab === "env" ? "4 Keys Configured" : "Infisical Agent template"}</span>
+            <span>{activeTab === "ecs" ? "entryPoint + command" : activeTab === "env" ? "4 Keys Configured" : "agent-config.yaml"}</span>
           </div>
           <HighlightedCode value={tabContent} />
           <div className="output-note"><Info size={14} /> Ready for deployment into Kubernetes, Docker, or systemd agent configs.</div>
