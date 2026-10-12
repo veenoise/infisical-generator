@@ -26,7 +26,7 @@ export function Header({ onReset }: { onReset: () => void }) {
         <div className="brand">
           <div className="brand-mark"><ShieldCheck size={20} /></div>
           <div>
-            <h1>Infisical Generator <span>Auto-Persisted</span></h1>
+            <h1>Infisical Generator</h1>
             <p>Construct, Base64 encode, and export Infisical Agent runtime env vars</p>
           </div>
         </div>

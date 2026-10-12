@@ -19,7 +19,7 @@ export default function Home() {
         </div>
       </main>
       {toastMessage && <div className="toast"><CheckCircle2 size={16} /> {toastMessage}</div>}
-      <footer>Infisical Generator <span>•</span> Automatic LocalStorage Persistence Active</footer>
+      <footer>Infisical Generator</footer>
     </div>
   );
 }
