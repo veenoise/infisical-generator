@@ -54,7 +54,7 @@ types/            Shared TypeScript and Zod types
 
 ## Security and data handling
 
-This is a client-side application. Form values, including client secrets, are stored in the browser's `localStorage` under `infisical_agent_generator_state_v1`. They are not sent to an application backend by this project.
+This is a client-side application. Form values, including client secrets, are stored in the browser's `localStorage` under `infisical_agent_generator_state_v2`. They are not sent to an application backend by this project.
 
 Do not use the generator on a shared or untrusted computer. Clear the saved configuration or browser site data after working with production credentials.
 
