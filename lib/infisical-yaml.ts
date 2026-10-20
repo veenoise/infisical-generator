@@ -55,9 +55,9 @@ export function buildGeneratedOutputs(data: InfisicalFormData): GeneratedOutput 
     rawYaml,
     base64Config,
     envBlockString: `INFISICAL_AGENT_CONFIG_BASE64="${base64Config}"
-INFISICAL_MACHINE_IDENTITY_ID="<Load from Parameter Store or AWS Secret Manager>"
-INFISICAL_UNIVERSAL_AUTH_CLIENT_ID="<Load from Parameter Store or AWS Secret Manager>"
-INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET="<Load from Parameter Store or AWS Secret Manager>"`,
+INFISICAL_MACHINE_IDENTITY_ID="${data.machineIdentityId}"
+INFISICAL_UNIVERSAL_AUTH_CLIENT_ID="${data.clientId}"
+INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET="${data.clientSecret}"`,
     ecsTaskDefinition: JSON.stringify(
       {
         entryPoint: ["sh", "-c"],

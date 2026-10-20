@@ -1,12 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import { Globe, Sliders } from "lucide-react";
+import { Eye, EyeOff, Globe, Info, KeyRound, Sliders } from "lucide-react";
 import type { InfisicalFormData } from "@/types/infisical";
+import { CopyButton } from "./CopyButton";
 import { FormField } from "./FormField";
 
-export function AgentForm({ form }: { form: UseFormReturn<InfisicalFormData> }) {
+export function AgentForm({
+  form,
+  onCopied,
+}: {
+  form: UseFormReturn<InfisicalFormData>;
+  onCopied: (message: string) => void;
+}) {
+  const [showSecret, setShowSecret] = useState(false);
   const { register, formState: { errors } } = form;
+  const values = form.watch();
 
   return (
     <section className="card form-card">
@@ -28,6 +38,27 @@ export function AgentForm({ form }: { form: UseFormReturn<InfisicalFormData> }) 
         <div className="field-grid">
           <FormField label="Container Client ID Directory" placeholder="/tmp/client-id" registration={register("containerClientIdDirectory")} error={errors.containerClientIdDirectory} />
           <FormField label="Container Client Secret Directory" placeholder="/tmp/client-secret" registration={register("containerClientSecretDirectory")} error={errors.containerClientSecretDirectory} />
+        </div>
+        <div className="credentials">
+          <h3><KeyRound size={14} /> Universal Auth Credentials</h3>
+          <p className="credentials-note">
+            <Info size={12} /> Prefer SSM Parameter Store ARNs (e.g. <code>arn:aws:ssm:&lt;region&gt;:&lt;account-id&gt;:parameter/&lt;name&gt;</code>) over plain text values.
+          </p>
+          <FormField label="INFISICAL_MACHINE_IDENTITY_ID" placeholder="arn:aws:ssm:<region>:<account-id>:parameter/infisical/machine-identity-id"
+            registration={register("machineIdentityId")} error={errors.machineIdentityId}
+            action={<CopyButton text={values.machineIdentityId} label="Copy ID" onCopied={onCopied} />} />
+          <FormField label="INFISICAL_UNIVERSAL_AUTH_CLIENT_ID" placeholder="arn:aws:ssm:<region>:<account-id>:parameter/infisical/client-id"
+            registration={register("clientId")} error={errors.clientId}
+            action={<CopyButton text={values.clientId} label="Copy Client ID" onCopied={onCopied} />} />
+          <FormField label="INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET" type={showSecret ? "text" : "password"}
+            placeholder="arn:aws:ssm:<region>:<account-id>:parameter/infisical/client-secret"
+            registration={register("clientSecret")} error={errors.clientSecret}
+            action={<div className="field-actions">
+              <button type="button" className="text-button" onClick={() => setShowSecret(!showSecret)}>
+                {showSecret ? <EyeOff size={12} /> : <Eye size={12} />} {showSecret ? "Hide" : "Show"}
+              </button>
+              <CopyButton text={values.clientSecret} label="Copy Secret" onCopied={onCopied} />
+            </div>} />
         </div>
       </form>
     </section>

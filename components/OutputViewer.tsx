@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Code2, FileText, Info, Terminal, Zap } from "lucide-react";
-import type { GeneratedOutput } from "@/types/infisical";
+import type { GeneratedOutput, InfisicalFormData } from "@/types/infisical";
 import { CopyButton } from "./CopyButton";
 
 type Tab = "env" | "yaml" | "ecs";
@@ -29,9 +29,11 @@ function HighlightedCode({ value }: { value: string }) {
 
 export function OutputViewer({
   outputs,
+  formData,
   onCopied,
 }: {
   outputs: GeneratedOutput;
+  formData: InfisicalFormData;
   onCopied: (message: string) => void;
 }) {
   const [activeTab, setActiveTab] = useState<Tab>("yaml");
@@ -61,10 +63,17 @@ export function OutputViewer({
       <section className="card quick-card">
         <h3><Zap size={14} /> Quick Action Clipboard</h3>
         <div className="quick-grid">
-          <div className="quick-item">
-            <span>Config Base64</span>
-            <CopyButton text={outputs.base64Config} label="" onCopied={onCopied} className="icon-copy" />
-          </div>
+          {[
+            ["Config Base64", outputs.base64Config],
+            ["Machine ID", formData.machineIdentityId],
+            ["Client ID", formData.clientId],
+            ["Client Secret", formData.clientSecret],
+          ].map(([label, value]) => (
+            <div className="quick-item" key={label}>
+              <span>{label}</span>
+              <CopyButton text={value} label="" onCopied={onCopied} className="icon-copy" />
+            </div>
+          ))}
         </div>
       </section>
     </div>

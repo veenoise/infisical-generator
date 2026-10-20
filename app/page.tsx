@@ -14,8 +14,8 @@ export default function Home() {
       <Header onReset={resetToDefaults} />
       <main className="main-content">
         <div className="content-grid">
-          <AgentForm form={form} />
-          <OutputViewer outputs={outputs} onCopied={showToast} />
+          <AgentForm form={form} onCopied={showToast} />
+          <OutputViewer outputs={outputs} formData={form.watch()} onCopied={showToast} />
         </div>
       </main>
       {toastMessage && <div className="toast"><CheckCircle2 size={16} /> {toastMessage}</div>}
