@@ -1,31 +1,46 @@
+import { stringify } from "yaml";
 import type { GeneratedOutput, InfisicalFormData } from "@/types/infisical";
 
 export function generateInfisicalYaml(data: InfisicalFormData): string {
   const cleanUrl = data.infisicalUrl.trim().replace(/\/+$/, "");
-  const cleanFolder = data.folderPath.trim().startsWith("/")
-    ? data.folderPath.trim()
-    : `/${data.folderPath.trim()}`;
+  const folder = data.folderPath.trim();
+  const cleanFolder = folder.startsWith("/") ? folder : `/${folder}`;
 
-  return `infisical:
-  address: "${cleanUrl}"
-  exit-after-auth: true
-auth:
-  type: "universal-auth"
-  config:
-    client-id: "${data.containerClientIdDirectory.trim()}"
-    client-secret: "${data.containerClientSecretDirectory.trim()}"
-sinks:
-  - type: file
-    config:
-      path: /infisical-agent/access-token
-templates:
-  - template-content: |
-      {{- with secret "${data.projectId.trim()}" "${data.envSlug.trim()}" "${cleanFolder}" }}
-      {{- range . }}
-      {{ .Key }}={{ .Value }}
-      {{- end }}
-      {{- end }}
-    destination-path: "${data.destinationPath.trim()}"`;
+  const templateContent = `{{- with secret "${data.projectId.trim()}" "${data.envSlug.trim()}" "${cleanFolder}" }}
+{{- range . }}
+{{ .Key }}={{ .Value }}
+{{- end }}
+{{- end }}`;
+
+  const config = {
+    infisical: {
+      address: cleanUrl,
+      "exit-after-auth": true,
+    },
+    auth: {
+      type: "universal-auth",
+      config: {
+        "client-id": data.containerClientIdDirectory.trim(),
+        "client-secret": data.containerClientSecretDirectory.trim(),
+      },
+    },
+    sinks: [
+      {
+        type: "file",
+        config: {
+          path: "/infisical-agent/access-token",
+        },
+      },
+    ],
+    templates: [
+      {
+        "template-content": templateContent,
+        "destination-path": data.destinationPath.trim(),
+      },
+    ],
+  };
+
+  return stringify(config, { lineWidth: 0 });
 }
 
 export function encodeBase64(value: string): string {
